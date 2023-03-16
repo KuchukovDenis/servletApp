@@ -12,34 +12,27 @@ import java.time.format.DateTimeFormatter;
 
 @WebServlet(urlPatterns = {"/"})
 public class FileServlet extends HttpServlet {
-    File file;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        file = File.listRoots()[0];
+        File file = null;
+        String path = req.getParameter("path");
+        if (path != null && path.equals("/")) {
+            file = File.listRoots()[0];
+        } else if (path == null) {
+            resp.sendRedirect("?path=/");
+            return;
+        } else {
+            file = new File(path);
+        }
+
+
         req.setAttribute("name", file.getPath());
         req.setAttribute("files", file.listFiles());
-        req.getRequestDispatcher("main.jsp").forward(req, resp);
+        req.setAttribute("path", file.toPath());
+
         resp.setContentType("text/html");
         req.setAttribute("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")));
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameterValues("btnBack") != null){
-            file = file.getParentFile();
-        }
-        else {
-            file = new File(req.getParameterValues("btn")[0]);
-        }
-        if (file == null){
-            file = File.listRoots()[0];
-        }
-        if(!file.isDirectory()){
-            file = file.getParentFile();
-        }
-        req.setAttribute("name", file.getPath());
-        req.setAttribute("files", file.listFiles());
         req.getRequestDispatcher("main.jsp").forward(req, resp);
     }
 }
