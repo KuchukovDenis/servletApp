@@ -22,13 +22,13 @@
     </tr>
     <tr>
         <td>
-            <a href="?path=${requestScope.path.getParent().toFile().getAbsolutePath().replace('\\', '/')}">/Up/</a><br>
+            <a href="?path=${requestScope.path.getParent().toFile().getAbsolutePath().substring(12).replace('\\', '/')}">/Up/</a><br>
         </td>
     </tr>
     <c:forEach var="file" items="${requestScope.files}">
         <tr>
             <td>
-                <a href="./?path=${file.getAbsolutePath().replace('\\', '/')}"
+                <a href="./?path=${file.getAbsolutePath().substring(12).replace('\\', '/')}"
                    class="ml2">${file.getName()}/</a>
             </td>
             <td>
@@ -37,13 +37,13 @@
             <td>
                     ${Date(file.lastModified())}
             </td>
-            <td>
-                <form method="POST" action="download">
-                    <button name="btnDownload" type="submit" value="${file.getPath()}">
-                        Download
-                    </button>
-                </form>
-            </td>
+<%--        <td>--%>
+<%--            <form method="GET" >--%>
+<%--                <button name="btnDownload" type="submit" value="${file.getPath()}">--%>
+<%--                    Download--%>
+<%--                </button>--%>
+<%--            </form>--%>
+<%--        </td>--%>
         </tr>
     </c:forEach>
 </table>
