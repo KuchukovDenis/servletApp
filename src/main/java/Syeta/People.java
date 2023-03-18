@@ -1,9 +1,26 @@
 package Syeta;
 
+import org.hibernate.annotations.NaturalId;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class People {
+    @NaturalId
     private String login;
     private String password;
     private String email;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     public People(String login, String password, String email) {
@@ -21,6 +38,9 @@ public class People {
     public People(String login, String password) {
         this.login = login;
         this.password = password;
+    }
+    public People(){
+
     }
 
     public String getLogin() {
